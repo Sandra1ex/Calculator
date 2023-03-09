@@ -1,0 +1,9 @@
+.side {
+  display: grid;
+  align-content: center;
+  margin-left: 4rem;
+  margin-top: 2rem;
+  justify-content: space-between;
+  grid-template-columns: repeat(2, 12rem);
+  align-items: center;
+}
