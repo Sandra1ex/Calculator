@@ -13,8 +13,32 @@ function Number() {
       dispatch({ type: "ADD_NUM", payload: textContent });
     }
   };
+
+  const handleClickOperation: React.MouseEventHandler<HTMLButtonElement> = (
+    e: any
+  ) => {
+    const { textContent } = e.target;
+    dispatch({ type: "ADD_OPERATION", payload: textContent });
+  };
+
+  const handleClickResult: React.MouseEventHandler<HTMLButtonElement> = () => {
+    dispatch({ type: "RESULT" });
+  };
+
   return (
     <div className="number-grid" draggable={true}>
+      <button type="button" onClick={handleClickOperation}>
+        C
+      </button>
+      <button type="button" onClick={handleClickOperation}>
+        √
+      </button>
+      <button type="button" onClick={handleClickOperation}>
+        %
+      </button>
+      <button type="button" onClick={handleClickOperation}>
+        ÷
+      </button>
       <button type="button" onClick={handleClickNumber}>
         7
       </button>
@@ -23,6 +47,9 @@ function Number() {
       </button>
       <button type="button" onClick={handleClickNumber}>
         9
+      </button>
+      <button type="button" onClick={handleClickOperation}>
+        x
       </button>
       <button type="button" onClick={handleClickNumber}>
         4
@@ -33,6 +60,9 @@ function Number() {
       <button type="button" onClick={handleClickNumber}>
         6
       </button>
+      <button type="button" onClick={handleClickOperation}>
+        -
+      </button>
       <button type="button" onClick={handleClickNumber}>
         1
       </button>
@@ -42,11 +72,20 @@ function Number() {
       <button type="button" onClick={handleClickNumber}>
         3
       </button>
-      <button type="button" onClick={handleClickNumber} className="span-two">
+      <button type="button" onClick={handleClickOperation}>
+        +
+      </button>
+      <button type="button" onClick={handleClickNumber}>
+        00
+      </button>
+      <button type="button" onClick={handleClickNumber}>
         0
       </button>
       <button type="button" onClick={handleClickNumber}>
-        ,
+        .
+      </button>
+      <button type="button" onClick={handleClickResult}>
+        =
       </button>
     </div>
   );
