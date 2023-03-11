@@ -6,7 +6,7 @@ export const initialState: CalcState = {
   prevNumber: "",
   operand: "",
   check: false,
-  history: ''
+  history: "",
 };
 
 function calcReducer(
@@ -20,6 +20,7 @@ function calcReducer(
           ...state,
           currentNumber: action.payload,
           check: false,
+          history: `${state.history}${String(state.operand)}${action.payload}`,
         };
       }
       if (state.currentNumber === "0" && action.payload === "0") {
@@ -31,19 +32,33 @@ function calcReducer(
       return {
         ...state,
         currentNumber: `${state.currentNumber || ""}${action.payload}`,
+        history: `${state.history}${state.operand}${action.payload}`,
       };
     }
     case "ADD_OPERATION": {
-      console.log(state, "state");
+      // console.log(state, "state");
+      // console.log(action.payload === "%", "action");
       //проверка на присутствие текущего и предыдущего значений
       if (state.currentNumber === "" && state.prevNumber === "") {
         return state;
       }
+
       //проверка на отсутствия предыдещего значния
-      //если оно есть, то сохр арифметический знак
-      // предыдущее значение принимает текущее
-      //а текущее обнуляется
+
       if (state.prevNumber === "") {
+        //если оно есть, и арифметически знак равен %
+        if (action.payload === "%") {
+          return {
+            ...state,
+            operand: "",
+            prevNumber: "",
+            currentNumber: String(parseFloat(state.currentNumber) / 100),
+            check: true,
+          };
+        }
+        //если оно есть, то сохр арифметический знак
+        // предыдущее значение принимает текущее
+        //а текущее обнуляется
         return {
           ...state,
           operand: action.payload,
@@ -57,6 +72,15 @@ function calcReducer(
         return {
           ...state,
           operand: action.payload,
+        };
+      } else if (action.payload === "%") {
+        return {
+          ...state,
+          operand: '',
+          currentNumber: String(
+            parseFloat(state.prevNumber) - parseFloat(state.prevNumber) / 100
+          ),
+          prevNumber: "",
         };
       }
       return {
@@ -80,6 +104,15 @@ function calcReducer(
         operand: "",
         currentNumber: transformation(state) || "", //разобраться
         check: true,
+      };
+    }
+    case "CLEAR": {
+      return {
+        currentNumber: "",
+        prevNumber: "",
+        operand: "",
+        check: false,
+        history: "",
       };
     }
     default:

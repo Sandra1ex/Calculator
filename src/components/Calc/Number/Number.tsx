@@ -25,9 +25,13 @@ function Number() {
     dispatch({ type: "RESULT" });
   };
 
+  const handleClickClear: React.MouseEventHandler<HTMLButtonElement> = () => {
+    dispatch({ type: "CLEAR" });
+  };
+
   return (
     <div className="number-grid" draggable={true}>
-      <button type="button" onClick={handleClickOperation}>
+      <button type="button" onClick={handleClickClear}>
         C
       </button>
       <button type="button" onClick={handleClickOperation}>
