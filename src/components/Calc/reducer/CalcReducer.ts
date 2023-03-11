@@ -36,15 +36,12 @@ function calcReducer(
       };
     }
     case "ADD_OPERATION": {
-      // console.log(state, "state");
-      // console.log(action.payload === "%", "action");
       //проверка на присутствие текущего и предыдущего значений
       if (state.currentNumber === "" && state.prevNumber === "") {
         return state;
       }
 
       //проверка на отсутствия предыдещего значния
-
       if (state.prevNumber === "") {
         //если оно есть, и арифметически знак равен %
         if (action.payload === "%") {
@@ -53,6 +50,16 @@ function calcReducer(
             operand: "",
             prevNumber: "",
             currentNumber: String(parseFloat(state.currentNumber) / 100),
+            check: true,
+          };
+        }
+        //если оно есть, и арифметически знак равен √
+        if (action.payload === "√") {
+          return {
+            ...state,
+            operand: "",
+            prevNumber: "",
+            currentNumber: String(Math.sqrt(parseFloat(state.currentNumber))),
             check: true,
           };
         }
@@ -74,12 +81,21 @@ function calcReducer(
           operand: action.payload,
         };
       } else if (action.payload === "%") {
+        //кейс на арифметическое действие с %
         return {
           ...state,
-          operand: '',
+          operand: "",
           currentNumber: String(
             parseFloat(state.prevNumber) - parseFloat(state.prevNumber) / 100
           ),
+          prevNumber: "",
+        };
+      } else if (action.payload === "√") {
+        //кейс на арифметическое действие с √
+        return {
+          ...state,
+          operand: "",
+          currentNumber: String(Math.sqrt(parseFloat(state.currentNumber))),
           prevNumber: "",
         };
       }
