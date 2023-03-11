@@ -1,3 +1,4 @@
+import transformation from "../../../utils/ArithmeticPerformer";
 import CalcAction from "./types/CalcAction";
 import CalcState from "./types/CalcState";
 
@@ -82,13 +83,23 @@ function calcReducer(
         };
       } else if (action.payload === "%") {
         //кейс на арифметическое действие с %
+        //переменная, которая хранит в себе занк деления или умножения
+        let oper =
+          (state.operand === "x" && "*") || (state.operand === "÷" && "/") || (state.operand);
+
+        let persentStringToCalculated = `${parseFloat(
+          state.prevNumber
+        )} ${oper} (${parseFloat(state.prevNumber)} / 100 * ${parseFloat(
+          state.currentNumber
+        )})`;
         return {
           ...state,
           operand: "",
-          currentNumber: String(
-            parseFloat(state.prevNumber) - parseFloat(state.prevNumber) / 100
-          ),
+          //функция используется безопасно, так как у нас есть проверки на числа
+          // eslint-disable-next-line no-eval
+          currentNumber: String(eval(persentStringToCalculated)),
           prevNumber: "",
+          check: true,
         };
       } else if (action.payload === "√") {
         //кейс на арифметическое действие с √
@@ -97,6 +108,7 @@ function calcReducer(
           operand: "",
           currentNumber: String(Math.sqrt(parseFloat(state.currentNumber))),
           prevNumber: "",
+          check: true,
         };
       }
       return {
@@ -134,40 +146,6 @@ function calcReducer(
     default:
       return state;
   }
-}
-
-function transformation({ currentNumber, operand, prevNumber }: CalcState) {
-  const prev = parseFloat(prevNumber);
-  const current = parseFloat(currentNumber);
-  if (isNaN(prev) || isNaN(current)) return "";
-  let computation;
-  switch (operand) {
-    case "+": {
-      computation = prev + current;
-      break;
-    }
-    case "-": {
-      computation = prev - current;
-      break;
-    }
-    case "÷": {
-      computation = prev / current;
-      break;
-    }
-    case "x": {
-      computation = prev * current;
-      break;
-    }
-    // case "√": {
-    //   computation = Math.sqrt(current);
-    //   break;
-    // }
-    // case "%": {
-    //   computation = current / 100;
-    //   break;
-    // }
-  }
-  return computation?.toString();
 }
 
 export default calcReducer;
